@@ -1,0 +1,10 @@
+dist/
+dist_old/
+public/
+.babelrc
+!.eslintrc.js
+node_modules/
+test/
+spec/
+jest.config.js
+webpack.config.js

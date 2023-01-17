@@ -1,0 +1,15 @@
+node_modules/
+npm-debug.log
+
+## Directory-based project
+.idea/
+
+# VS Code
+.vscode/
+
+# MacOs system files
+.DS_Store
+
+# Dist folders
+#dist/
+dist_old/
