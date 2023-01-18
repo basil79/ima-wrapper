@@ -1,11 +1,12 @@
 const VideoAdManagerIMAWrapper = function(adContainer, videoElement) {
 
-  if(!(adContainer instanceof Element || adContainer instanceof HTMLDocument) || !(videoElement instanceof Element || videoElement instanceof HTMLDocument)) {
+  if(!(adContainer instanceof Element || adContainer instanceof HTMLDocument)
+    || !(videoElement instanceof Element || videoElement instanceof HTMLDocument)) {
     throw new Error('ad container and/or video element are not defined');
   }
 
-  this._adContainer = null;
-  this._videoElement = null;
+  this._adContainer = adContainer;
+  this._videoElement = videoElement;
 
   this._attributes = {
     width: 300,
@@ -14,8 +15,10 @@ const VideoAdManagerIMAWrapper = function(adContainer, videoElement) {
     volume: 0,
     version: '!!#Version#!!'
   };
+  // Events
   this._eventCallbacks = {};
 
+  // IMA SDK ima3.js
   this.IMA_SDK_URL = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 
   this._adsManager = null; // TODO
