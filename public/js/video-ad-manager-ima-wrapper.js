@@ -1,6 +1,6 @@
 /*!
- * ads-manager-ima-wrapper v1.0.0 development
- * Updated : 2023-01-17
+ * video-ad-manager-ima-wrapper v1.0.0 development
+ * Updated : 2023-01-18
  */
 /*
  * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
@@ -15,23 +15,23 @@ var adserve;
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/ads-manager-ima-wrapper.js":
-/*!****************************************!*\
-  !*** ./src/ads-manager-ima-wrapper.js ***!
-  \****************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst AdsManagerIMAWrapper = function() {\n  // TODO:\n  this._options = {};\n};\nAdsManagerIMAWrapper.prototype.requestAds = (vastUrl, options = {}) => {\n  console.log('request ads');\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (AdsManagerIMAWrapper);\n\n\n//# sourceURL=webpack://adserve/./src/ads-manager-ima-wrapper.js?");
-
-/***/ }),
-
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"tv\": () => (/* binding */ tv)\n/* harmony export */ });\n/* harmony import */ var _ads_manager_ima_wrapper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ads-manager-ima-wrapper */ \"./src/ads-manager-ima-wrapper.js\");\n\n\nconst tv = {\n  AdsManagerIMAWrapper: _ads_manager_ima_wrapper__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\n}\n\n\n\n\n//# sourceURL=webpack://adserve/./src/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"tv\": () => (/* binding */ tv)\n/* harmony export */ });\n/* harmony import */ var _video_ad_manager_ima_wrapper__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./video-ad-manager-ima-wrapper */ \"./src/video-ad-manager-ima-wrapper.js\");\n\n\nconst tv = {\n  VideoAdManagerImaWrapper: _video_ad_manager_ima_wrapper__WEBPACK_IMPORTED_MODULE_0__[\"default\"]\n}\n\n\n\n\n//# sourceURL=webpack://adserve/./src/index.js?");
+
+/***/ }),
+
+/***/ "./src/video-ad-manager-ima-wrapper.js":
+/*!*********************************************!*\
+  !*** ./src/video-ad-manager-ima-wrapper.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (__WEBPACK_DEFAULT_EXPORT__)\n/* harmony export */ });\nconst VideoAdManagerImaWrapper = function() {\n  // TODO:\n  this._options = {};\n};\nVideoAdManagerImaWrapper.prototype.requestAds = (vastUrl, options = {}) => {\n  console.log('request ads');\n};\n\n/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (VideoAdManagerImaWrapper);\n\n\n//# sourceURL=webpack://adserve/./src/video-ad-manager-ima-wrapper.js?");
 
 /***/ })
 

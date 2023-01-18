@@ -1,3 +1,3 @@
-# ads-manager-ima-wrapper
+# video-ad-manager-ima-wrapper
 
 TODO

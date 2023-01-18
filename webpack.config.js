@@ -25,7 +25,7 @@ module.exports = function(env, args) {
     entry : './src/index.js',
     output : {
       path: __dirname + (args.mode === 'production' ? '/dist' : '/public/js'),
-      filename : 'ads-manager-ima-wrapper.js',
+      filename : 'video-ad-manager-ima-wrapper.js',
       library: 'adserve'
     },
     plugins: plugins,
@@ -46,13 +46,13 @@ module.exports = function(env, args) {
   }];
 
   args.mode === 'production' && outputs.push({
-    entry : './src/ads-manager-ima-wrapper.js',
+    entry : './src/video-ad-manager-ima-wrapper.js',
     experiments: {
       outputModule: true,
     },
     output : {
       path: __dirname + '/dist',
-      filename : 'ads-manager-ima-wrapper.es.js',
+      filename : 'video-ad-manager-ima-wrapper.es.js',
       library: {
         type: 'module'
       }
