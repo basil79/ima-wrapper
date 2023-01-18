@@ -1,7 +1,7 @@
-import VideoAdManagerImaWrapper from './video-ad-manager-ima-wrapper';
+import VideoAdManagerIMAWrapper from './video-ad-manager-ima-wrapper';
 
 const tv = {
-  VideoAdManagerImaWrapper
+  VideoAdManagerIMAWrapper
 }
 
 export { tv }
