@@ -1,6 +1,13 @@
 # video-ad-manager-ima-wrapper
 
-> Wrapper for HTML5 Video Ad Manager and IMA SDK to automatically switch GAM tags to use IMA SDK.
+> Wrapper for [HTML5 Video Ad Manager](https://github.com/basil79/ads-manager) and [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side) to automatically switch [Google VAST ad tag](https://support.google.com/admanager/answer/10678356?hl=en) to use IMA SDK.
+
+This SDK includes 2 video ad managers:
+
+- [HTML5 Video Ad Manager](https://github.com/basil79/ads-manager)
+- [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side)
+
+NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/js/sdkloader/ima3.js) script, the SDK will check the IMA SDK Client Side version if it was included and use it, if not, the SDK will try to load `ima3.js`.
 
 **Table of Contents**
 
