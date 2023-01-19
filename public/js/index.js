@@ -30,7 +30,7 @@
   var eventsList = document.getElementById('events-list');
   function appendEvent(text) {
     var today = new Date();
-    var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds() + ":" + today.getMilliseconds();
+    var time = today.getHours() + ':' + today.getMinutes() + ':' + today.getSeconds() + ':' + today.getMilliseconds();
     var eventItem = document.createElement('li');
     eventItem.innerHTML = time + ' ' + text;
     eventsList.appendChild(eventItem);
@@ -85,19 +85,19 @@
       adsManager.init(width, height, viewMode);
     } catch (adError) {
       // Play the video without ads, if an error occurs
-      console.log("AdsManager could not initialize ad");
+      console.log('AdsManager could not initialize ad', adError);
     }
 
   });
   adsManager.addEventListener('AdLoaded', function(adEvent) {
-    console.log('AdLoaded > ad type is', adEvent.type);
+    console.log('AdLoaded > ad type is', adEvent.type, adEvent.isLinear());
     appendEvent('AdLoaded');
-    if(adEvent.type === 'linear') {
+    if(adEvent.type === 'linear' || adEvent.isLinear()) {
       try {
         adsManager.start();
       } catch (adError) {
         // Play the video without ads, if an error occurs
-        console.log("AdsManager could not be started");
+        console.log('AdsManager could not be started', adError);
       }
     } else {
       console.log('ADM > AdLoaded > ad is not linear');
@@ -215,7 +215,7 @@
    */
 
   window.addEventListener('resize', function(event) {
-    console.log("window resized");
+    console.log('window resized');
     var width = videoElement.clientWidth;
     var height = videoElement.clientHeight;
     var viewMode = 'normal';

@@ -1,6 +1,6 @@
-import {loadScript} from './utils';
 import AdError from './ad-error';
 import {AdsManager} from 'ads-manager';
+import IMAWrapper from './ima-wrapper';
 
 const VideoAdManagerIMAWrapper = function(adContainer, videoElement) {
 
@@ -51,57 +51,67 @@ const VideoAdManagerIMAWrapper = function(adContainer, videoElement) {
     AdLog: 'AdLog',
     AllAdsCompleted: 'AllAdsCompleted' // After all ads completed, vast, vpaid, vmap
   };
+  // An object containing all registered events.
+  // These events are all callbacks.
   this._eventCallbacks = {};
-
-  // IMA SDK ima3.js
-  this.IMA_SDK_SRC = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
-  // Check that Client Side IMA SDK has been included
-  // NOTE: (window['google'] && google.ima) check for any
-  // IMA SDK, including SDK for Server Side ads.
-  // The 3rd check insures we have the right SDK:
-  // {google.ima.AdsLoader} is an object that's part of Client Side IMA SDK
-  // but not Server Side SDK.
-  if (!window['google'] || !google.ima || !google.ima.AdsLoader) {
-    console.log('ima3.js is not included');
-    loadScript(this.IMA_SDK_SRC, true, (isIMALoaded) => {
-      if(isIMALoaded) {
-        console.log('ima3.js is loaded, setup IMA');
-        // TODO: setup
-      } else {
-        //this.onAdError('IMA SDK is not loaded');
-        console.log('ima3.js is not loaded');
-      }
-    });
-  } else {
-    console.log('ima3.js is included, use it');
-    // TODO: setup
-  }
 
   this._adsManager = new AdsManager(this._adContainer);
   console.log('AdsManager version is', this._adsManager.getVersion());
-  this._imaManager = null; // TODO
+  this._adsManager.addEventListener(this.EVENTS.AdsManagerLoaded, this.onAdsManagerLoaded.bind(this));
+  this._adsManager.addEventListener(this.EVENTS.AdError, this.onAdError.bind(this));
+  this._adsManager.addEventListener(this.EVENTS.AdLoaded, this.onAdLoaded.bind(this));
+
+
+  this._imaWrapper = new IMAWrapper(this._adContainer, this._videoElement);
+  this._imaWrapper.addEventListener(this.EVENTS.AdsManagerLoaded, this.onAdsManagerLoaded.bind(this));
+  this._imaWrapper.addEventListener(this.EVENTS.AdError, this.onAdError.bind(this));
+  this._imaWrapper.addEventListener(this.EVENTS.AdLoaded, this.onAdLoaded.bind(this));
 
   this._useIMA = false;
 
 };
 VideoAdManagerIMAWrapper.prototype.init = function(width, height, viewMode) {
-  console.log('init');
+  console.log('init', width, height, viewMode);
+  this._useIMA ? this._imaWrapper.init(width, height, viewMode) : this._adsManager.init(width, height, viewMode);
+};
+VideoAdManagerIMAWrapper.prototype.abort = function() {
+  this._useIMA ? this._imaWrapper.abort() : this._adsManager.abort();
+};
+VideoAdManagerIMAWrapper.prototype.resize = function(width, height, viewMode) {
+  this._useIMA ? this._imaWrapper.resize(width, height, viewMode) : this._adsManager.resize(width, height, viewMode);
 };
 VideoAdManagerIMAWrapper.prototype.requestAds = function(vastUrl, options = {}) {
   console.log('request ads', vastUrl);
-  // Check if vast url contains pubads.g.doubleclick.net
-  vastUrl.indexOf('pubads.g.doubleclick.net') !== -1 ? this._useIMA = true : this._useIMA = false;
-
-  console.log('use IMA', this._useIMA);
-};
-VideoAdManagerIMAWrapper.prototype.resize = function(width, height, viewMode) {
-  // TODO:
+  this.abort();
+  if(vastUrl && typeof vastUrl === 'string') {
+    // Check if vast url contains pubads.g.doubleclick.net
+    vastUrl.indexOf('pubads.g.doubleclick.net') !== -1 ? this._useIMA = true : this._useIMA = false;
+    console.log('use IMA', this._useIMA);
+    this._useIMA ? this._imaWrapper.requestAds(vastUrl, options) : this._adsManager.requestAds(vastUrl, options);
+  } else {
+    this.onAdError('VAST URL/XML is empty');
+  }
 };
 // Events
+VideoAdManagerIMAWrapper.prototype.onAdsManagerLoaded = function() {
+  console.log('on AdsManagerLoaded');
+  if (this.EVENTS.AdsManagerLoaded in this._eventCallbacks) {
+    if(typeof this._eventCallbacks[this.EVENTS.AdsManagerLoaded] === 'function') {
+      this._eventCallbacks[this.EVENTS.AdsManagerLoaded]();
+    }
+  }
+};
 VideoAdManagerIMAWrapper.prototype.onAdError = function(message) {
   if (this.EVENTS.AdError in this._eventCallbacks) {
     if(typeof this._eventCallbacks[this.EVENTS.AdError] === 'function') {
       this._eventCallbacks[this.EVENTS.AdError](typeof message !== 'object' ? new AdError(message) : message);
+    }
+  }
+};
+VideoAdManagerIMAWrapper.prototype.onAdLoaded = function(event) {
+  if (this.EVENTS.AdLoaded in this._eventCallbacks) {
+    if(typeof this._eventCallbacks[this.EVENTS.AdLoaded] === 'function') {
+      this._eventCallbacks[this.EVENTS.AdLoaded](event);
     }
   }
 };
