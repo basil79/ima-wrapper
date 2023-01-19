@@ -7,7 +7,7 @@ This SDK includes 2 video ad managers:
 - [HTML5 Video Ad Manager](https://github.com/basil79/ads-manager)
 - [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side)
 
-NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/js/sdkloader/ima3.js) script, the SDK will check the IMA SDK Client Side version if it was included and use it, if not, the SDK will try to load `ima3.js` from `https://imasdk.googleapis.com/js/sdkloader/ima3.js`.
+NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/js/sdkloader/ima3.js) script, the SDK will check the IMA SDK Client Side version if it was included and use it, if not, the SDK will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
 
 **Table of Contents**
 

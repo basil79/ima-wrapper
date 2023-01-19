@@ -41,7 +41,7 @@ const IMAWrapper = function(adContainer, videoElement) {
   this._eventCallbacks = {};
 
   // IMA SDK ima3.js
-  this.IMA_SDK_SRC = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
+  this.IMA_SDK_SRC = '//imasdk.googleapis.com/js/sdkloader/ima3.js';
   // Check that Client Side IMA SDK has been included
   // NOTE: (window['google'] && google.ima) check for any
   // IMA SDK, including SDK for Server Side ads.
@@ -79,11 +79,11 @@ const IMAWrapper = function(adContainer, videoElement) {
 
   // Options
   this._options = {
+    autoplay: true,
+    muted: true,
+    secure: false, // default false, google.ima.ImaSdkSettings.VpaidMode.INSECURE
+    vastLoadTimeout: 23000,
     loadVideoTimeout: 8000, // default value is 8000 ms = 8 sec, timeout to load video of the ad
-    vastLoadTimeout: 20000,
-    adWillAutoPlay : true,
-    adWillPlayMuted : false,
-    useSecureIframe: false // default false, google.ima.ImaSdkSettings.VpaidMode.INSECURE
   };
 
 };
@@ -94,6 +94,7 @@ IMAWrapper.prototype.setupIMA = function() {
   this._adDisplayContainer = new google.ima.AdDisplayContainer(this._adContainer, this._videoElement);
   this._adsLoader = new google.ima.AdsLoader(this._adDisplayContainer);
 
+  console.log('ia adsLoader', this._adsLoader)
   /*
   this._adsLoader.getSettings().setVpaidMode(this._options.useSecureIframe ?
     google.ima.ImaSdkSettings.VpaidMode.ENABLED :
@@ -118,9 +119,44 @@ IMAWrapper.prototype.init = function(width, height, viewMode) {
 };
 IMAWrapper.prototype.start = function() {
   console.log('ima start');
-  //this._adsManager && this._adsManager.start();
+  this._adsManager && this._adsManager.start();
+};
+IMAWrapper.prototype.getDuration = function() {
+  return this._currentAd ? this._currentAd.getDuration() : -2
+};
+IMAWrapper.prototype.getRemainingTime = function() {
+  return this._adsManager ? this._adsManager.getRemainingTime() : -2
+};
+IMAWrapper.prototype.resume = function() {
+  this._adsManager && this._adsManager.resume();
+};
+IMAWrapper.prototype.pause = function() {
+  this._adsManager && this._adsManager.pause();
+};
+IMAWrapper.prototype.stop = function() {
+  this._adsManager && this._adsManager.stop();
+};
+IMAWrapper.prototype.skip = function() {
+  this._adsManager && this._adsManager.skip();
+};
+IMAWrapper.prototype.resize = function(width, height, viewMode) {
+  this._adsManager && (this._adsManager.resize(width, height, viewMode), this.onAdSizeChange());
+};
+IMAWrapper.prototype.getVolume = function() {
+  return this._adsManager && this._adsManager.getVolume()
+};
+IMAWrapper.prototype.setAdVolume = function(value) {
+  this._adsManager && this._adsManager.setVolume(value);
+};
+IMAWrapper.prototype.collapse = function() {
+  this._adsManager && this._adsManager.collapse();
+};
+IMAWrapper.prototype.expand = function() {
+  this._adsManager && this._adsManager.expand();
 };
 IMAWrapper.prototype.requestAds = function(vastUrl, options) {
+
+  console.log('ima requestAds', this._adsLoader);
 
   // Assign options
   Object.assign(this._options, options);
@@ -147,10 +183,13 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
   adsRequest.nonLinearAdSlotWidth = this._videoElement.width;
   adsRequest.nonLinearAdSlotHeight = 150;
 
-  adsRequest.setAdWillAutoPlay(this._options.adWillAutoPlay);
-  adsRequest.setAdWillPlayMuted(this._options.adWillPlayMuted);
+  adsRequest.setAdWillAutoPlay(this._options.autoplay);
+  console.log('ima ad will play muted', this._options.muted);
+  if(this._options.muted) {
+    adsRequest.setAdWillPlayMuted(this._options.muted);
+  }
 
-  this._adsLoader.getSettings().setVpaidMode(this._options.useSecureIframe ?
+  this._adsLoader.getSettings().setVpaidMode(this._options.secure ?
     google.ima.ImaSdkSettings.VpaidMode.ENABLED :
     google.ima.ImaSdkSettings.VpaidMode.INSECURE
   );
@@ -211,11 +250,8 @@ IMAWrapper.prototype.onIMAAdsManagerAdError = function(adsManagerAdErrorEvent) {
 IMAWrapper.prototype.onIMAAdClickThru = function(adEvent) {
   this.onAdClickThru('', adEvent.getAd().getAdId(), false);
 };
-IMAWrapper.prototype.onIMADurationChange = function() {
-  this.onAdDurationChange();
-};
 IMAWrapper.prototype.onIMAAdVideoComplete = function() {
-  // TODO:
+  this.onAdVideoComplete();
 };
 IMAWrapper.prototype.onIMAAdLoaded = function(adEvent) {
   this._currentAd = adEvent.getAd();
@@ -256,6 +292,9 @@ IMAWrapper.prototype.onAdLinearChange = function() {
 };
 IMAWrapper.prototype.onAdSkippableStateChange = function() {
   this._callEvent(this.EVENTS.AdSkippableStateChange);
+};
+IMAWrapper.prototype.onAdSizeChange = function() {
+  this._callEvent(this.EVENTS.AdSizeChange);
 };
 IMAWrapper.prototype.onAdVolumeChange = function() {
   this._callEvent(this.EVENTS.AdVolumeChange);
@@ -303,8 +342,10 @@ IMAWrapper.prototype.onAdUserClose = function() {
 };
 IMAWrapper.prototype.onAllAdsCompleted = function() {
   this.abort();
-  this.onAdVideoComplete();
-  this.onAdStopped();
+  //this.onAdVideoComplete();
+  //this.onAdStopped();
+
+  this._callEvent(this.EVENTS.AllAdsCompleted);
 };
 IMAWrapper.prototype.onAdError = function(message) {
   if (this.EVENTS.AdError in this._eventCallbacks) {

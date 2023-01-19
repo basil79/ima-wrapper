@@ -1,6 +1,6 @@
 {
   "name": "video-ad-manager-ima-wrapper",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Wrapper for HTML5 Video Ad Manager and IMA SDK to automatically switch GAM tags to use IMA SDK.",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
