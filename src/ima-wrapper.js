@@ -114,13 +114,11 @@ IMAWrapper.prototype.maybeInitializeAdDisplayContainer = function() {
 IMAWrapper.prototype.init = function(width, height, viewMode) {
   console.log('ima init');
   this.maybeInitializeAdDisplayContainer();
-  this._adsManager.init(width, height, viewMode);
+  this._adsManager && this._adsManager.init(width, height, viewMode);
 };
-IMAWrapper.prototype.abort = function() {
-  console.log('ima destroy adsManager');
-  // Destroy
-  this._adsManager && (this._adsManager.destroy(), this._adsManager = null);
-  this.doContentComplete();
+IMAWrapper.prototype.start = function() {
+  console.log('ima start');
+  //this._adsManager && this._adsManager.start();
 };
 IMAWrapper.prototype.requestAds = function(vastUrl, options) {
 
@@ -159,7 +157,12 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
   // Request ads
   this._adsLoader.requestAds(adsRequest);
 };
-
+IMAWrapper.prototype.abort = function() {
+  console.log('ima destroy adsManager');
+  // Destroy
+  this._adsManager && (this._adsManager.destroy(), this._adsManager = null);
+  this.doContentComplete();
+};
 
 // IMA Events
 IMAWrapper.prototype.onIMAAdsManagerLoaded = function(adsManagerLoadedEvent) {
@@ -235,93 +238,57 @@ IMAWrapper.prototype.onIMAAdLog = function(adEvent) {
 
 // Events
 IMAWrapper.prototype.onAdsManagerLoaded = function() {
-  if (this.EVENTS.AdsManagerLoaded in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdsManagerLoaded] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdsManagerLoaded]();
-    }
-  }
+  this._callEvent(this.EVENTS.AdsManagerLoaded);
 };
 IMAWrapper.prototype.onAdLoaded = function() {
   if (this.EVENTS.AdLoaded in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdLoaded] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdLoaded](this._currentAd);
-    }
+    this._eventCallbacks[this.EVENTS.AdLoaded](this._currentAd);
   }
 };
 IMAWrapper.prototype.onAdStarted = function() {
-  if (this.EVENTS.AdStarted in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdStarted]();
-  }
+  this._callEvent(this.EVENTS.AdStarted);
 };
 IMAWrapper.prototype.onAdDurationChange = function() {
-  if (this.EVENTS.AdDurationChange in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdDurationChange]();
-  }
+  this._callEvent(this.EVENTS.AdDurationChange);
 };
 IMAWrapper.prototype.onAdLinearChange = function() {
-  if (this.EVENTS.AdLinearChange in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdLinearChange]();
-  }
+  this._callEvent(this.EVENTS.AdLinearChange);
 };
 IMAWrapper.prototype.onAdSkippableStateChange = function() {
-  if (this.EVENTS.AdSkippableStateChange in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdSkippableStateChange]();
-  }
+  this._callEvent(this.EVENTS.AdSkippableStateChange);
 };
 IMAWrapper.prototype.onAdVolumeChange = function() {
-  if (this.EVENTS.AdVolumeChange in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVolumeChange]();
-  }
+  this._callEvent(this.EVENTS.AdVolumeChange);
 };
 IMAWrapper.prototype.onAdVideoStart = function() {
-  if (this.EVENTS.AdVideoStart in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVideoStart]();
-  }
+  this._callEvent(this.EVENTS.AdVideoStart);
 };
 IMAWrapper.prototype.onAdImpression = function() {
-  if (this.EVENTS.AdImpression in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdImpression]();
-  }
+  this._callEvent(this.EVENTS.AdImpression);
 };
 IMAWrapper.prototype.onAdVideoFirstQuartile = function() {
-  if (this.EVENTS.AdVideoFirstQuartile in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVideoFirstQuartile]();
-  }
+  this._callEvent(this.EVENTS.AdVideoFirstQuartile);
 };
 IMAWrapper.prototype.onAdVideoMidpoint = function() {
-  if (this.EVENTS.AdVideoMidpoint in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVideoMidpoint]();
-  }
+  this._callEvent(this.EVENTS.AdVideoMidpoint);
 };
 IMAWrapper.prototype.onAdVideoThirdQuartile = function() {
-  if (this.EVENTS.AdVideoThirdQuartile in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVideoThirdQuartile]();
-  }
+  this._callEvent(this.EVENTS.AdVideoThirdQuartile);
 };
 IMAWrapper.prototype.onAdVideoComplete = function() {
-  if (this.EVENTS.AdVideoComplete in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdVideoComplete]();
-  }
+  this._callEvent(this.EVENTS.AdVideoComplete);
 };
 IMAWrapper.prototype.onAdPaused = function() {
-  if (this.EVENTS.AdPaused in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdPaused]();
-  }
+  this._callEvent(this.EVENTS.AdPaused);
 };
 IMAWrapper.prototype.onAdPlaying = function() {
-  if (this.EVENTS.AdPlaying in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdPlaying]();
-  }
+  this._callEvent(this.EVENTS.AdPlaying);
 };
 IMAWrapper.prototype.onAdSkipped = function() {
-  if (this.EVENTS.AdSkipped in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdSkipped]();
-  }
+  this._callEvent(this.EVENTS.AdSkipped);
 };
 IMAWrapper.prototype.onAdStopped = function() {
-  if (this.EVENTS.AdStopped in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdStopped]();
-  }
+  this._callEvent(this.EVENTS.AdStopped);
 };
 IMAWrapper.prototype.onAdClickThru = function(url, id, playerHandles) {
   if (this.EVENTS.AdClickThru in this._eventCallbacks) {
@@ -329,14 +296,10 @@ IMAWrapper.prototype.onAdClickThru = function(url, id, playerHandles) {
   }
 };
 IMAWrapper.prototype.onAdInteraction = function() {
-  if (this.EVENTS.AdInteraction in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdInteraction]();
-  }
+  this._callEvent(this.EVENTS.AdInteraction);
 };
 IMAWrapper.prototype.onAdUserClose = function() {
-  if (this.EVENTS.AdUserClose in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdUserClose]();
-  }
+  this._callEvent(this.EVENTS.AdUserClose);
 };
 IMAWrapper.prototype.onAllAdsCompleted = function() {
   this.abort();
@@ -345,14 +308,17 @@ IMAWrapper.prototype.onAllAdsCompleted = function() {
 };
 IMAWrapper.prototype.onAdError = function(message) {
   if (this.EVENTS.AdError in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdError] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdError](message);
-    }
+    this._eventCallbacks[this.EVENTS.AdError](message);
   }
 };
 IMAWrapper.prototype.onAdLog = function(message) {
   if (this.EVENTS.AdLog in this._eventCallbacks) {
     this._eventCallbacks[this.EVENTS.AdLog](message);
+  }
+};
+IMAWrapper.prototype._callEvent = function(eventName) {
+  if(eventName in this._eventCallbacks) {
+    this._eventCallbacks[eventName]();
   }
 };
 IMAWrapper.prototype.addEventListener = function(eventName, callback, context) {

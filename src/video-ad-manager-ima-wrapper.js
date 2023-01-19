@@ -60,12 +60,14 @@ const VideoAdManagerIMAWrapper = function(adContainer, videoElement) {
   this._adsManager.addEventListener(this.EVENTS.AdsManagerLoaded, this.onAdsManagerLoaded.bind(this));
   this._adsManager.addEventListener(this.EVENTS.AdError, this.onAdError.bind(this));
   this._adsManager.addEventListener(this.EVENTS.AdLoaded, this.onAdLoaded.bind(this));
+  this._adsManager.addEventListener(this.EVENTS.AdStarted, this.onAdStarted.bind(this));
 
 
   this._imaWrapper = new IMAWrapper(this._adContainer, this._videoElement);
   this._imaWrapper.addEventListener(this.EVENTS.AdsManagerLoaded, this.onAdsManagerLoaded.bind(this));
   this._imaWrapper.addEventListener(this.EVENTS.AdError, this.onAdError.bind(this));
   this._imaWrapper.addEventListener(this.EVENTS.AdLoaded, this.onAdLoaded.bind(this));
+  this._imaWrapper.addEventListener(this.EVENTS.AdStarted, this.onAdStarted.bind(this));
 
   this._useIMA = false;
 
@@ -74,8 +76,9 @@ VideoAdManagerIMAWrapper.prototype.init = function(width, height, viewMode) {
   console.log('init', width, height, viewMode);
   this._useIMA ? this._imaWrapper.init(width, height, viewMode) : this._adsManager.init(width, height, viewMode);
 };
-VideoAdManagerIMAWrapper.prototype.abort = function() {
-  this._useIMA ? this._imaWrapper.abort() : this._adsManager.abort();
+VideoAdManagerIMAWrapper.prototype.start = function() {
+  console.log(this._imaWrapper);
+  this._useIMA ? this._imaWrapper.start() : this._adsManager.start();
 };
 VideoAdManagerIMAWrapper.prototype.resize = function(width, height, viewMode) {
   this._useIMA ? this._imaWrapper.resize(width, height, viewMode) : this._adsManager.resize(width, height, viewMode);
@@ -92,30 +95,33 @@ VideoAdManagerIMAWrapper.prototype.requestAds = function(vastUrl, options = {}) 
     this.onAdError('VAST URL/XML is empty');
   }
 };
+VideoAdManagerIMAWrapper.prototype.abort = function() {
+  this._useIMA ? this._imaWrapper.abort() : this._adsManager.abort();
+};
+
 // Events
 VideoAdManagerIMAWrapper.prototype.onAdsManagerLoaded = function() {
-  console.log('on AdsManagerLoaded');
-  if (this.EVENTS.AdsManagerLoaded in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdsManagerLoaded] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdsManagerLoaded]();
-    }
-  }
+  this._callEvent(this.EVENTS.AdsManagerLoaded);
 };
 VideoAdManagerIMAWrapper.prototype.onAdError = function(message) {
   if (this.EVENTS.AdError in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdError] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdError](typeof message !== 'object' ? new AdError(message) : message);
-    }
+    this._eventCallbacks[this.EVENTS.AdError](typeof message !== 'object' ? new AdError(message) : message);
   }
 };
-VideoAdManagerIMAWrapper.prototype.onAdLoaded = function(event) {
+VideoAdManagerIMAWrapper.prototype.onAdLoaded = function(adEvent) {
   if (this.EVENTS.AdLoaded in this._eventCallbacks) {
-    if(typeof this._eventCallbacks[this.EVENTS.AdLoaded] === 'function') {
-      this._eventCallbacks[this.EVENTS.AdLoaded](event);
-    }
+    this._eventCallbacks[this.EVENTS.AdLoaded](adEvent);
   }
+};
+VideoAdManagerIMAWrapper.prototype.onAdStarted = function() {
+  this._callEvent(this.EVENTS.AdStarted);
 };
 
+VideoAdManagerIMAWrapper.prototype._callEvent = function(eventName) {
+  if(eventName in this._eventCallbacks) {
+    this._eventCallbacks[eventName]();
+  }
+};
 VideoAdManagerIMAWrapper.prototype.addEventListener = function(eventName, callback, context) {
   const givenCallback = callback.bind(context);
   this._eventCallbacks[eventName] = givenCallback;
