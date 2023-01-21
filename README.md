@@ -1,13 +1,8 @@
-# video-ad-manager-ima-wrapper
+# ima-wrapper
 
-> Wrapper for [HTML5 Video Ad Manager](https://github.com/basil79/ads-manager) and [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side) to automatically switch [Google VAST ad tag](https://support.google.com/admanager/answer/10678356?hl=en) to use IMA SDK.
+> Wrapper for [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side).
 
-This SDK includes 2 video ad managers:
-
-- [HTML5 Video Ad Manager](https://github.com/basil79/ads-manager)
-- [IMA SDK for HTML5](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side)
-
-NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/js/sdkloader/ima3.js) script, the SDK will check the IMA SDK Client Side version if it was included and use it, if not, the SDK will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
+NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/js/sdkloader/ima3.js) script, the wrapper will check the IMA SDK Client Side version if it was included and use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
 
 **Table of Contents**
 
@@ -28,8 +23,8 @@ NOTE: If you have already included the [ima3.js](https://imasdk.googleapis.com/j
 
 ### Using Git
 
-    $ git clone https://github.com/basil79/video-ad-manager-ima-wrapper.git
-    $ cd video-ad-manager-ima-wrapper
+    $ git clone https://github.com/basil79/ima-wrapper.git
+    $ cd ima-wrapper
     $ npm ci
 
 ## Build
@@ -44,7 +39,7 @@ To build the project for production:
 
 This will generate the following file:
 
-+ `./dist/video-ad-manager-ima-wrapper.js` - Minified browser production code
++ `./dist/ima-wrapper.js` - Minified browser production code
 
 ## Run
 
@@ -54,7 +49,7 @@ Then navigate to: http://localhost:8087 in your browser
 
 ### Supported Browsers
 
-video-ad-manager-ima-wrapper is supported all modern browsers.
+ima-wrapper is supported all modern browsers.
 
 ## Contribute
 

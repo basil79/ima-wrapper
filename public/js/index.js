@@ -42,9 +42,9 @@
   // Example
   var videoElement = document.getElementById('video-element');
   var adContainer = document.getElementById('ad-container');
-  var adsManager = new adserve.tv.VideoAdManagerIMAWrapper(adContainer, videoElement);
+  var adsManager = new adserve.tv.IMAWrapper(adContainer, videoElement);
 
-  console.log('VideoAdManagerIMAWrapper version is', adsManager.getVersion());
+  console.log('IMAWrapper version is', adsManager.getVersion());
 
   var isAdPaused = false;
 
