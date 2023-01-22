@@ -1,6 +1,6 @@
 # ima-wrapper
 
-> Wrapper for IMA SDK for HTML5.
+> Wrapper for IMA SDK HTML5.
 
 NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkloader/ima3.js) script in the page, the wrapper will check the IMA SDK client side version if it was included and use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
 
