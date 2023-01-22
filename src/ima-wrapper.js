@@ -40,6 +40,28 @@ const IMAWrapper = function(adContainer, videoElement) {
   // These events are all callbacks.
   this._eventCallbacks = {};
 
+  // IMA global variables
+  this._adsLoader = null;
+  this._adDisplayContainer = null;
+  this._adDisplayContainerInitialized = false;
+  this._adsManager = null;
+  this._currentAd = null;
+  this._adPodInfo = null;
+
+  // Attributes
+  this._attributes = {
+    version: '!!#Version#!!'
+  };
+
+  // Options
+  this._options = {
+    autoplay: true,
+    muted: true,
+    secure: false, // default false, google.ima.ImaSdkSettings.VpaidMode.INSECURE
+    vastLoadTimeout: 23000,
+    loadVideoTimeout: 8000, // default value is 8000 ms = 8 sec, timeout to load video of the ad
+  };
+
   // IMA SDK ima3.js
   this.IMA_SDK_SRC = '//imasdk.googleapis.com/js/sdkloader/ima3.js';
   // Check that Client Side IMA SDK has been included
@@ -64,28 +86,6 @@ const IMAWrapper = function(adContainer, videoElement) {
     this.setupIMA();
   }
 
-  // IMA global variables
-  this._adsLoader = null;
-  this._adDisplayContainer = null;
-  this._adDisplayContainerInitialized = false;
-  this._adsManager = null;
-  this._currentAd = null;
-  this._adPodInfo = null;
-
-  // Attributes
-  this._attributes = {
-    volume: 0
-  };
-
-  // Options
-  this._options = {
-    autoplay: true,
-    muted: true,
-    secure: false, // default false, google.ima.ImaSdkSettings.VpaidMode.INSECURE
-    vastLoadTimeout: 23000,
-    loadVideoTimeout: 8000, // default value is 8000 ms = 8 sec, timeout to load video of the ad
-  };
-
 };
 IMAWrapper.prototype.setupIMA = function() {
   console.log('setup IMA');
@@ -93,13 +93,6 @@ IMAWrapper.prototype.setupIMA = function() {
 
   this._adDisplayContainer = new google.ima.AdDisplayContainer(this._adContainer, this._videoElement);
   this._adsLoader = new google.ima.AdsLoader(this._adDisplayContainer);
-
-  console.log('ia adsLoader', this._adsLoader)
-  /*
-  this._adsLoader.getSettings().setVpaidMode(this._options.useSecureIframe ?
-    google.ima.ImaSdkSettings.VpaidMode.ENABLED :
-    google.ima.ImaSdkSettings.VpaidMode.INSECURE
-  );*/
 
   // Listen and respond to ads loaded and error events.
   this._adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, this.onIMAAdsManagerLoaded.bind(this), false);
@@ -368,6 +361,10 @@ IMAWrapper.prototype.addEventListener = function(eventName, callback, context) {
 };
 IMAWrapper.prototype.removeEventListener = function(eventName) {
   this._eventCallbacks[eventName] = null;
+};
+
+IMAWrapper.prototype.getVersion = function() {
+  return this._attributes.version;
 };
 
 export default IMAWrapper;
