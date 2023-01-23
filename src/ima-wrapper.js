@@ -174,7 +174,7 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
   adsRequest.linearAdSlotWidth = this._videoElement.width;
   adsRequest.linearAdSlotHeight = this._videoElement.height;
   adsRequest.nonLinearAdSlotWidth = this._videoElement.width;
-  adsRequest.nonLinearAdSlotHeight = 150;
+  adsRequest.nonLinearAdSlotHeight = this._videoElement.height;
 
   adsRequest.setAdWillAutoPlay(this._options.autoplay);
   console.log('ima ad will play muted', this._options.muted);
