@@ -77,7 +77,6 @@ const IMAWrapper = function(adContainer, videoElement) {
         console.log('ima3.js is loaded, setup IMA');
         this.setupIMA();
       } else {
-        //this.onAdError('IMA SDK is not loaded');
         console.log('ima3.js is not loaded');
       }
     });
@@ -97,7 +96,6 @@ IMAWrapper.prototype.setupIMA = function() {
   // Listen and respond to ads loaded and error events.
   this._adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, this.onIMAAdsManagerLoaded.bind(this), false);
   this._adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, this.onIMAAdsManagerAdError.bind(this), false);
-
 };
 IMAWrapper.prototype.doContentComplete = function() {
   this._adsLoader && this._adsLoader.contentComplete();
@@ -138,8 +136,11 @@ IMAWrapper.prototype.resize = function(width, height, viewMode) {
 IMAWrapper.prototype.getVolume = function() {
   return this._adsManager && this._adsManager.getVolume()
 };
-IMAWrapper.prototype.setAdVolume = function(value) {
-  this._adsManager && this._adsManager.setVolume(value);
+IMAWrapper.prototype.setVolume = function(volume) {
+  this._adsManager && this._adsManager.setVolume(volume);
+};
+IMAWrapper.prototype.getSkippableState = function() {
+  return this._adsManager && this._adsManager.getAdSkippableState();
 };
 IMAWrapper.prototype.collapse = function() {
   this._adsManager && this._adsManager.collapse();
@@ -199,7 +200,7 @@ IMAWrapper.prototype.abort = function() {
 // IMA Events
 IMAWrapper.prototype.onIMAAdsManagerLoaded = function(adsManagerLoadedEvent) {
 
-  console.log('ima adsmanager loaded');
+  console.log('ima adsManager loaded');
 
   const adsRenderingSettings = new google.ima.AdsRenderingSettings;
   adsRenderingSettings.restoreCustomPlaybackStateOnAdBreakComplete = true;
@@ -335,9 +336,6 @@ IMAWrapper.prototype.onAdUserClose = function() {
 };
 IMAWrapper.prototype.onAllAdsCompleted = function() {
   this.abort();
-  //this.onAdVideoComplete();
-  //this.onAdStopped();
-
   this._callEvent(this.EVENTS.AllAdsCompleted);
 };
 IMAWrapper.prototype.onAdError = function(message) {
