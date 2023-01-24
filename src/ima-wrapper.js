@@ -1,9 +1,10 @@
 import {loadScript} from './utils';
 
-const IMAWrapper = function(adContainer, videoElement) {
+const IMAWrapper = function(adContainer, videoElement, callback) {
 
   this._adContainer = adContainer;
   this._videoElement = videoElement;
+  this._callback = callback;
 
   // Events
   this.EVENTS = {
@@ -72,12 +73,16 @@ const IMAWrapper = function(adContainer, videoElement) {
   // but not Server Side SDK.
   if (!window['google'] || !google.ima || !google.ima.AdsLoader) {
     console.log('ima3.js is not included');
-    loadScript(this.IMA_SDK_SRC, true, (isIMALoaded) => {
+    loadScript(this.IMA_SDK_SRC, true, (isIMALoaded, error) => {
       if(isIMALoaded) {
         console.log('ima3.js is loaded, setup IMA');
         this.setupIMA();
       } else {
         console.log('ima3.js is not loaded');
+        if(this._callback
+          && typeof this._callback === 'function') {
+          this._callback('ima sdk not loaded');
+        }
       }
     });
   } else {
@@ -96,6 +101,11 @@ IMAWrapper.prototype.setupIMA = function() {
   // Listen and respond to ads loaded and error events.
   this._adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, this.onIMAAdsManagerLoaded.bind(this), false);
   this._adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, this.onIMAAdsManagerAdError.bind(this), false);
+
+  if(this._callback
+    && typeof this._callback === 'function') {
+    this._callback();
+  }
 };
 IMAWrapper.prototype.doContentComplete = function() {
   this._adsLoader && this._adsLoader.contentComplete();
@@ -128,7 +138,13 @@ IMAWrapper.prototype.stop = function() {
   this._adsManager && this._adsManager.stop();
 };
 IMAWrapper.prototype.skip = function() {
-  this._adsManager && this._adsManager.skip();
+  if(this._adsManager) {
+    if (this._adsManager.getAdSkippableState()) {
+      this._adsManager.skip();
+    }
+    // Force skip
+    this.onIMAAdSkipped();
+  }
 };
 IMAWrapper.prototype.resize = function(width, height, viewMode) {
   this._adsManager && (this._adsManager.resize(width, height, viewMode), this.onAdSizeChange());
@@ -234,7 +250,6 @@ IMAWrapper.prototype.onIMAAdsManagerLoaded = function(adsManagerLoadedEvent) {
   this._adsManager.addEventListener(google.ima.AdEvent.Type.VOLUME_CHANGED, this.onAdVolumeChange.bind(this));
   this._adsManager.addEventListener(google.ima.AdEvent.Type.VOLUME_MUTED, this.onAdVolumeChange.bind(this));
 
-  //this.onAdLoaded();
   this.onAdsManagerLoaded();
 };
 IMAWrapper.prototype.onIMAAdsManagerAdError = function(adsManagerAdErrorEvent) {
@@ -249,7 +264,7 @@ IMAWrapper.prototype.onIMAAdVideoComplete = function() {
 };
 IMAWrapper.prototype.onIMAAdLoaded = function(adEvent) {
   this._currentAd = adEvent.getAd();
-  this.onAdLoaded();
+  this.onAdLoaded(this._currentAd);
 };
 IMAWrapper.prototype.onIMAAdSkipped = function() {
   // Destroy ad
@@ -270,9 +285,9 @@ IMAWrapper.prototype.onIMAAdLog = function(adEvent) {
 IMAWrapper.prototype.onAdsManagerLoaded = function() {
   this._callEvent(this.EVENTS.AdsManagerLoaded);
 };
-IMAWrapper.prototype.onAdLoaded = function() {
+IMAWrapper.prototype.onAdLoaded = function(currentAd) {
   if (this.EVENTS.AdLoaded in this._eventCallbacks) {
-    this._eventCallbacks[this.EVENTS.AdLoaded](this._currentAd);
+    this._eventCallbacks[this.EVENTS.AdLoaded](currentAd);
   }
 };
 IMAWrapper.prototype.onAdStarted = function() {
@@ -360,7 +375,6 @@ IMAWrapper.prototype.addEventListener = function(eventName, callback, context) {
 IMAWrapper.prototype.removeEventListener = function(eventName) {
   this._eventCallbacks[eventName] = null;
 };
-
 IMAWrapper.prototype.getVersion = function() {
   return this._attributes.version;
 };
