@@ -9,10 +9,10 @@ function loadScript(src, async = false, callback) {
       callback(true, window);
     }
   }, false);
-  scriptElement.addEventListener('error', function() {
+  scriptElement.addEventListener('error', function(error) {
     firstElement.removeChild(scriptElement);
     if(callback && typeof callback === 'function') {
-      callback(false);
+      callback(false, error);
     }
   }, false);
   firstElement.insertBefore(scriptElement, firstElement.firstChild);

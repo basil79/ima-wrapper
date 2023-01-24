@@ -89,9 +89,9 @@
 
   });
   adsManager.addEventListener('AdLoaded', function(adEvent) {
-    console.log('AdLoaded > ad type is', adEvent.isLinear ? adEvent.isLinear() : adEvent.type === 'linear');
+    console.log('AdLoaded > ad type is', adEvent.isLinear());
     appendEvent('AdLoaded');
-    if(/*adEvent.type === 'linear' || */adEvent.isLinear ? adEvent.isLinear() : adEvent.type === 'linear') {
+    if(adEvent.isLinear()) {
       try {
         adsManager.start();
       } catch (adError) {
