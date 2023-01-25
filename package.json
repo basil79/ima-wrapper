@@ -1,6 +1,6 @@
 {
   "name": "ima-wrapper",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "IMA SDK Wrapper",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"

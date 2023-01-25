@@ -1,3 +1,7 @@
+[![npm version](https://badgen.net/npm/v/ima-wrapper)](https://badgen.net/npm/v/ima-wrapper)
+[![downloads per week](https://badgen.net/npm/dw/ima-wrapper)](https://badgen.net/npm/dw/ima-wrapper)
+[![license](https://badgen.net/github/license/basil79/ima-wrapper)](https://badgen.net/github/license/basil79/ima-wrapper)
+
 # ima-wrapper
 
 > Wrapper for IMA SDK HTML5.
@@ -140,6 +144,10 @@ const adsManager = new adserve.tv.IMAWrapper(adContainer, videoElement, (error) 
 ## Install
 
 ### Get Started
+
+ima-wrapper is available as an NPM package and can be easily installed with:
+
+    $ npm i ima-wrapper
 
 ### Using Git
 
