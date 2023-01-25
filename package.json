@@ -13,10 +13,11 @@
     "contBuild": "watch \"npm run build:dev\" src",
     "devServer": "npm-run-all -p testServer contBuild",
     "start": "npm run devServer",
-    "test": "test",
     "build:dev": "webpack --mode=development",
     "build:prod": "webpack --mode=production",
     "prebuild": "rm -rf dist_old && mkdir dist_old && cp -a dist/. dist_old/",
+    "test": "mocha --require @babel/register --require global-jsdom/register && jest",
+    "jest": "jest",
     "testServer": "http-server --cors -p 8087 --silent",
     "lint": "eslint ."
   },
