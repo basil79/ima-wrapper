@@ -25,7 +25,7 @@ import IMAWrapper from 'ima-wrapper';
 // Get your HTML element for ad container
 const adContainer = document.getElementById('ad-container');
 // Get your video element
-const videoElement = document.getElementById('video');
+const videoElement = document.getElementById('video-element');
 // Define IMA wrapper, pass ad container and video element
 const adsManager = new IMAWrapper(adContainer, videoElement, (error) => {
     if(error) {
