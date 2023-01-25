@@ -1,7 +1,7 @@
 {
   "name": "ima-wrapper",
   "version": "1.0.5",
-  "description": "Wrapper for IMA SDK. IMA Wrapper is a convenience layer around Google Interactive Media Ads (IMA SDK for HTML5). Play video ads in any format.",
+  "description": "Wrapper for IMA SDK. IMA Wrapper is a convenience layer around Google Interactive Media Ads (IMA SDK for HTML5)",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
