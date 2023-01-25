@@ -4,8 +4,7 @@
 
 # ima-wrapper
 
-> Wrapper for IMA SDK.
-> IMA Wrapper is a convenience layer around the  Google Interactive Media Ads (IMA SDK for HTML5)
+> Wrapper for IMA SDK. IMA Wrapper is a convenience layer around Google Interactive Media Ads (IMA SDK for HTML5). Play video ads in any format.
 
 This SDK can be used to create a simple In-Stream/Out-Stream video player or to implement more complex scenarios such as: Creating multiple instances of the [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side) to request multiple video ads at the same time (in parallel), VPAID integration and e.t.c.
 
