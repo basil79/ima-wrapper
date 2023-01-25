@@ -20,7 +20,7 @@ NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkl
 ## Usage
 
 ```javascript
-import IMAWrapper from 'ima-warpper';
+import IMAWrapper from 'ima-wrapper';
 
 // Get your HTML element for ad container
 const adContainer = document.getElementById('ad-container');
