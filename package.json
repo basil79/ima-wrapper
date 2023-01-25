@@ -43,7 +43,6 @@
     "url": "https://github.com/basil79/ima-wrapper/issues"
   },
   "homepage": "https://github.com/basil79/ima-wrapper#readme",
-  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
