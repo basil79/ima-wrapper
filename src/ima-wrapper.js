@@ -88,7 +88,7 @@ const IMAWrapper = function(adContainer, videoElement, callback) {
         console.log('ima3.js is not loaded');
         if(this._callback
           && typeof this._callback === 'function') {
-          this._callback('ima sdk not loaded');
+          this._callback('ima3.js - failed to load');
         }
       }
     });
