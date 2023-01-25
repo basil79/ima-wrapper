@@ -1,7 +1,7 @@
 {
   "name": "ima-wrapper",
-  "version": "1.0.4",
-  "description": "IMA SDK Wrapper",
+  "version": "1.0.5",
+  "description": "Wrapper for IMA SDK",
   "publishConfig": {
     "registry": "https://registry.npmjs.org"
   },
@@ -26,14 +26,17 @@
     "url": "https://github.com/basil79/ima-wrapper.git"
   },
   "keywords": [
+    "ima",
+    "ima-sdk",
+    "ima-client-side",
     "vast",
     "vpaid",
     "vmap",
     "video-ads",
     "vast-client.js",
     "ads-manager",
-    "ima-sdk",
     "iab",
+    "google",
     "video",
     "instream",
     "outstream"

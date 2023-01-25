@@ -4,9 +4,12 @@
 
 # ima-wrapper
 
-> Wrapper for IMA SDK HTML5.
+> Wrapper for IMA SDK.
+> IMA Wrapper is a convenience layer around the  Google Interactive Media Ads (IMA SDK for HTML5)
 
-NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkloader/ima3.js) script in the page, the wrapper will check the IMA SDK client side version if it was included and use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
+This SDK can be used to create a simple In-Stream/Out-Stream video player or to implement more complex scenarios such as: Creating multiple instances of the [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side) to request multiple video ads at the same time (in parallel), VPAID integration and e.t.c.
+
+NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkloader/ima3.js) script in the page, the wrapper will check the IMA client-side SDK version if it was included and use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
 
 **Table of Contents**
 
