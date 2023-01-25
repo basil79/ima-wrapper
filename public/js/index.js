@@ -39,8 +39,8 @@
   }
 
   // Example
-  var videoElement = document.getElementById('video-element');
   var adContainer = document.getElementById('ad-container');
+  var videoElement = document.getElementById('video-element');
   var adsManager = new adserve.tv.IMAWrapper(adContainer, videoElement, function(error) {
     if(error) {
       console.log(error);

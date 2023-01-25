@@ -2,6 +2,13 @@ import {loadScript} from './utils';
 
 const IMAWrapper = function(adContainer, videoElement, callback) {
 
+  if(!(adContainer && (adContainer instanceof HTMLElement
+    || adContainer.getRootNode))
+    || !(videoElement && (videoElement instanceof HTMLElement
+      || videoElement.getRootNode))) {
+    throw new Error('ad container and/or video element not defined');
+  }
+
   this._adContainer = adContainer;
   this._videoElement = videoElement;
   this._callback = callback;
@@ -167,7 +174,7 @@ IMAWrapper.prototype.expand = function() {
 };
 IMAWrapper.prototype.requestAds = function(vastUrl, options) {
 
-  console.log('ima requestAds', this._adsLoader);
+  console.log('ima requestAds', vastUrl, options);
 
   // Assign options
   Object.assign(this._options, options);
@@ -271,14 +278,6 @@ IMAWrapper.prototype.onIMAAdLoaded = function(adEvent) {
   this._currentAd = adEvent.getAd();
   this.onAdLoaded(this._currentAd);
 };
-/*
-IMAWrapper.prototype.onIMAAdSkipped = function() {
-  // Destroy ad
-  this.abort();
-  this.onAdSkipped();
-  this.onAdStopped();
-};
- */
 IMAWrapper.prototype.onIMAAdError = function(adErrorEvent) {
   console.log('ima error', adErrorEvent);
   this.onAdError(adErrorEvent.getError()); //.getError().getErrorCode() + ' ' + adErrorEvent.getError().getMessage() + ' ' + adErrorEvent.getError().getInnerError())
