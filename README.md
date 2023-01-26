@@ -10,7 +10,7 @@ This SDK can be used to create a simple in-stream/out-stream video ad player, or
 - Creating multiple instances of the [IMA SDK](https://developers.google.com/interactive-media-ads/docs/sdks/html5/client-side) to request multiple ad requests at the same time (in parallel)
 - Integration with VPAID
 
-NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkloader/ima3.js) script in the page, the wrapper will check the IMA client side SDK version if it was included and will use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
+NOTE: If you have already included the [ima3.js](//imasdk.googleapis.com/js/sdkloader/ima3.js) script, the wrapper will check the IMA client side SDK version if it was included and will use it, if not, the wrapper will try to load `ima3.js` from `//imasdk.googleapis.com/js/sdkloader/ima3.js`.
 
 **Table of Contents**
 
