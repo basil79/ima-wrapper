@@ -1,3 +1,4 @@
+/*global google*/
 import {loadScript} from './utils';
 
 const IMAWrapper = function(adContainer, videoElement, callback) {
@@ -80,7 +81,7 @@ const IMAWrapper = function(adContainer, videoElement, callback) {
   // but not Server Side SDK.
   if (!window['google'] || !google.ima || !google.ima.AdsLoader) {
     console.log('ima3.js is not included');
-    loadScript(this.IMA_SDK_SRC, true, (isIMALoaded, error) => {
+    loadScript(this.IMA_SDK_SRC, true, (isIMALoaded) => {
       if(isIMALoaded) {
         console.log('ima3.js is loaded, setup IMA');
         this.setupIMA();
