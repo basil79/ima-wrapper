@@ -220,6 +220,8 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
 };
 IMAWrapper.prototype.abort = function() {
   console.log('ima destroy adsManager');
+  this._hasLoaded = false;
+  this._hasStarted = false;
   // Destroy
   this._adsManager && (this._adsManager.destroy(), this._adsManager = null);
   this.doContentComplete();
