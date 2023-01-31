@@ -71,6 +71,9 @@ const IMAWrapper = function(adContainer, videoElement, callback) {
     loadVideoTimeout: 8000, // default value is 8000 ms = 8 sec, timeout to load video of the ad
   };
 
+  this._hasLoaded = false;
+  this._hasStarted = false;
+
   // IMA SDK ima3.js
   this.IMA_SDK_SRC = '//imasdk.googleapis.com/js/sdkloader/ima3.js';
   // Check that Client Side IMA SDK has been included
@@ -276,6 +279,7 @@ IMAWrapper.prototype.onIMAAdVideoComplete = function() {
   this.onAdVideoComplete();
 };
 IMAWrapper.prototype.onIMAAdLoaded = function(adEvent) {
+  this._hasLoaded = true;
   this._currentAd = adEvent.getAd();
   this.onAdLoaded(this._currentAd);
 };
@@ -297,6 +301,7 @@ IMAWrapper.prototype.onAdLoaded = function(currentAd) {
   }
 };
 IMAWrapper.prototype.onAdStarted = function() {
+  this._hasStarted = true;
   this._callEvent(this.EVENTS.AdStarted);
 };
 IMAWrapper.prototype.onAdDurationChange = function() {
@@ -344,9 +349,13 @@ IMAWrapper.prototype.onAdSkipped = function() {
   this._abort();
 };
 IMAWrapper.prototype.onAdStopped = function() {
-  this._callEvent(this.EVENTS.AdStopped);
-  // abort the ad, unsubscribe and reset to a default state
-  this._abort();
+  if(!this._hasStarted) {
+    this.onAdError('ad stopped before ad started');
+  } else {
+    this._callEvent(this.EVENTS.AdStopped);
+    // abort the ad, unsubscribe and reset to a default state
+    this._abort();
+  }
 };
 IMAWrapper.prototype.onAdClickThru = function(url, id, playerHandles) {
   if (this.EVENTS.AdClickThru in this._eventCallbacks) {
