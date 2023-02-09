@@ -55,7 +55,6 @@ const IMAWrapper = function(adContainer, videoElement, callback) {
   this._adDisplayContainerInitialized = false;
   this._adsManager = null;
   this._currentAd = null;
-  this._adPodInfo = null;
 
   // Attributes
   this._attributes = {
@@ -113,6 +112,9 @@ IMAWrapper.prototype.setupIMA = function() {
   this._adsLoader.addEventListener(google.ima.AdsManagerLoadedEvent.Type.ADS_MANAGER_LOADED, this.onIMAAdsManagerLoaded.bind(this), false);
   this._adsLoader.addEventListener(google.ima.AdErrorEvent.Type.AD_ERROR, this.onIMAAdsManagerAdError.bind(this), false);
 
+  // Complete
+  this._videoElement.onended = this.doContentComplete;
+
   if(this._callback
     && typeof this._callback === 'function') {
     this._callback();
@@ -126,12 +128,20 @@ IMAWrapper.prototype.maybeInitializeAdDisplayContainer = function() {
 };
 IMAWrapper.prototype.init = function(width, height, viewMode) {
   console.log('ima init');
-  this.maybeInitializeAdDisplayContainer();
-  this._adsManager && this._adsManager.init(width, height, viewMode);
+  try {
+    this.maybeInitializeAdDisplayContainer();
+    this._adsManager && this._adsManager.init(width, height, viewMode);
+  } catch (adError) {
+    this.onAdError(adError);
+  }
 };
 IMAWrapper.prototype.start = function() {
   console.log('ima start');
-  this._adsManager && this._adsManager.start();
+  try {
+    this._adsManager && this._adsManager.start();
+  } catch (adError) {
+    this.onAdError(adError);
+  }
 };
 IMAWrapper.prototype.getDuration = function() {
   return this._currentAd ? this._currentAd.getDuration() : -2
@@ -178,6 +188,7 @@ IMAWrapper.prototype.expand = function() {
 };
 IMAWrapper.prototype.requestAds = function(vastUrl, options) {
 
+  this.abort();
   console.log('ima requestAds', vastUrl, options);
 
   // Assign options
@@ -220,6 +231,8 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
 };
 IMAWrapper.prototype.abort = function() {
   console.log('ima destroy adsManager');
+  this._currentAd = null;
+
   this._hasLoaded = false;
   this._hasStarted = false;
   // Destroy
@@ -351,13 +364,16 @@ IMAWrapper.prototype.onAdSkipped = function() {
   this._abort();
 };
 IMAWrapper.prototype.onAdStopped = function() {
+  /*
   if(!this._hasStarted) {
     this.onAdError('ad stopped before ad started');
   } else {
     this._callEvent(this.EVENTS.AdStopped);
     // abort the ad, unsubscribe and reset to a default state
-    this._abort();
+    //this._abort();
   }
+   */
+  this._callEvent(this.EVENTS.AdStopped);
 };
 IMAWrapper.prototype.onAdClickThru = function(url, id, playerHandles) {
   if (this.EVENTS.AdClickThru in this._eventCallbacks) {
@@ -371,11 +387,11 @@ IMAWrapper.prototype.onAdUserClose = function() {
   this._callEvent(this.EVENTS.AdUserClose);
 };
 IMAWrapper.prototype.onAllAdsCompleted = function() {
-  this.abort();
+  //this.abort();
   this._callEvent(this.EVENTS.AllAdsCompleted);
 };
 IMAWrapper.prototype.onAdError = function(message) {
-  this.abort();
+  //this.abort();
   if (this.EVENTS.AdError in this._eventCallbacks) {
     this._eventCallbacks[this.EVENTS.AdError](message);
   }

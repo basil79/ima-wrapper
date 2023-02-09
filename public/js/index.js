@@ -7,6 +7,8 @@
   var stopAdButton = document.getElementById('stop-ad-button');
   var skipAdButton = document.getElementById('skip-ad-button');
   var resizeAdButton = document.getElementById('resize-ad-button');
+  var setAdVolume1Button = document.getElementById('set-ad-volume-1-button');
+  var setAdVolume0Button = document.getElementById('set-ad-volume-0-button');
 
   function enableAdButtons() {
     console.log('enable ad buttons');
@@ -326,6 +328,14 @@
     var height = videoElement.clientHeight;
     var viewMode = 'normal';
     adsManager.resize(width, height, viewMode);
+  }, false);
+
+  setAdVolume1Button.addEventListener('click', function() {
+    adsManager.setVolume(1);
+  }, false);
+
+  setAdVolume0Button.addEventListener('click', function() {
+    adsManager.setVolume(0);
   }, false);
 
   clearLogsButton.addEventListener('click', function() {
