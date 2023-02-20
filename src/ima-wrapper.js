@@ -68,6 +68,7 @@ const IMAWrapper = function(adContainer, videoElement, callback) {
     secure: false, // default false, google.ima.ImaSdkSettings.VpaidMode.INSECURE
     vastLoadTimeout: 23000,
     loadVideoTimeout: 8000, // default value is 8000 ms = 8 sec, timeout to load video of the ad
+    omid: null // Open Measurement (OM) SDK, default null, { 'GOOGLE': 'FULL', 'OTHER': 'DOMAIN' }
   };
 
   this._hasLoaded = false;
@@ -215,6 +216,16 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
   adsRequest.linearAdSlotHeight = this._videoElement.height;
   adsRequest.nonLinearAdSlotWidth = this._videoElement.width;
   adsRequest.nonLinearAdSlotHeight = this._videoElement.height;
+
+  if(this._options.omid) {
+    // Omid Access Mode Rules
+    adsRequest.omidAccessModeRules = {};
+    for(const vendor in this._options.omid) {
+      if(google.ima.OmidVerificationVendor[vendor] && google.ima.OmidAccessMode[this._options.omid[vendor]]) {
+        adsRequest.omidAccessModeRules[google.ima.OmidVerificationVendor[vendor]] = google.ima.OmidAccessMode[this._options.omid[vendor]];
+      }
+    }
+  }
 
   adsRequest.setAdWillAutoPlay(this._options.autoplay);
   console.log('ima ad will play muted', this._options.muted);
