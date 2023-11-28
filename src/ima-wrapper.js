@@ -210,6 +210,11 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
   // Get/Set options
   this._options.pageUrl && (adsRequest.pageUrl = this._options.pageUrl);
 
+  // TODO:
+  // content duration, in seconds
+  //adsRequest.contentDuration = 300;
+  //adsRequest.pageUrl = 'http://localhost:8087/'
+
   adsRequest.vastLoadTimeout = this._options.vastLoadTimeout;
 
   adsRequest.linearAdSlotWidth = this._videoElement.width;
@@ -237,6 +242,9 @@ IMAWrapper.prototype.requestAds = function(vastUrl, options) {
     google.ima.ImaSdkSettings.VpaidMode.ENABLED :
     google.ima.ImaSdkSettings.VpaidMode.INSECURE
   );
+
+
+  console.log('adsRequest', adsRequest);
   // Request ads
   this._adsLoader.requestAds(adsRequest);
 };
@@ -327,6 +335,7 @@ IMAWrapper.prototype.onAdLoaded = function(currentAd) {
   }
 };
 IMAWrapper.prototype.onAdStarted = function() {
+  console.log('IMA > CONTENT_PAUSE_REQUESTED');
   this._hasStarted = true;
   this._callEvent(this.EVENTS.AdStarted);
 };

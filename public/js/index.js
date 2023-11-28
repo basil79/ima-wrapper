@@ -112,7 +112,8 @@
   });
   adsManager.addEventListener('AdStarted', function() {
     console.log('AdStarted');
-    appendEvent('AdStarted');
+    //appendEvent('AdStarted');
+    appendEvent('IMA > CONTENT_PAUSE_REQUESTED');
 
     // Pause
     console.log('CONTENT_PAUSE_REQUESTED > is video not paused?', !videoElement.paused)
@@ -294,7 +295,7 @@
       videoElement.play();
     }
 
-    adsManager.requestAds(giveVastUrl, { muted: true });
+    adsManager.requestAds(giveVastUrl, { muted: true, secure: false });
   }
 
   testAdButton.addEventListener('click', function() {
